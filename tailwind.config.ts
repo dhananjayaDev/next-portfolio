@@ -8,6 +8,8 @@ const {
 } = require("tailwindcss/lib/util/flattenColorPalette");
  
 
+// not included the  github config.ts file: https://github.com/adrianhajdin/portfolio/tree/main?tab=readme-ov-file#snippets
+
 export default {
   content: [
     "./pages/**/*.{js,ts,jsx,tsx,mdx}",
@@ -25,6 +27,7 @@ export default {
     },
   },
   plugins: [
+    addVariablesForColors,
     function ({ matchUtilities, theme }: any) {
       matchUtilities(
         {
@@ -49,3 +52,15 @@ export default {
     },
   ],
 } satisfies Config;
+
+
+function addVariablesForColors({ addBase, theme }: any) {
+  let allColors = flattenColorPalette(theme("colors"));
+  let newVars = Object.fromEntries(
+    Object.entries(allColors).map(([key, val]) => [`--${key}`, val])
+  );
+ 
+  addBase({
+    ":root": newVars,
+  });
+}
